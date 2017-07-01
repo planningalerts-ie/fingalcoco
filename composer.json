@@ -10,7 +10,7 @@
         "ext-sqlite3": "*",
         "ext-pdo_sqlite": "*",
         "ext-gd": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
         "php-coord/php-coord": "^2.0"
     }
 }
