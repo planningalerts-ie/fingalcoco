@@ -6,9 +6,13 @@
 // POST to http://www.dublincity.ie/LPA/GetGeoJSONFeatureGeometry.asmx/GetFeatureBySearchInformation
 // POST data {"nSearchID":3,"nFeatureKeyFieldValue":64931145}
 // 
-use geoPHP;
+
 require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
+
+$polygon = geoPHP::load('POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2,2 3,3 3,3 2,2 2))','wkt');
+
+
 //
 // // Read in a page
 // $html = scraperwiki::scrape("http://foo.com");
