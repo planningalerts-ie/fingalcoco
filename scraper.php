@@ -11,7 +11,12 @@ require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
 include_once('vendor/phayes/geophp/geoPHP.inc');
 
-$polygon = geoPHP::load('POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2,2 3,3 3,3 2,2 2))','wkt');
+
+$test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27F17A%2F0314%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326')
+$application = json_decode($test->features[0]->geometry);
+
+$polygon = geoPHP::load(json_encode($applcation),'json');
+
 
 
 //
