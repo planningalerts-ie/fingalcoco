@@ -9,6 +9,7 @@
 
 require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
+include_once('geoPHP.inc');
 
 $polygon = geoPHP::load('POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2,2 3,3 3,3 2,2 2))','wkt');
 
