@@ -6,7 +6,7 @@
 // POST to http://www.dublincity.ie/LPA/GetGeoJSONFeatureGeometry.asmx/GetFeatureBySearchInformation
 // POST data {"nSearchID":3,"nFeatureKeyFieldValue":64931145}
 // 
-
+use geoPHP;
 require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
 //
