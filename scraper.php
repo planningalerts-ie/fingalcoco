@@ -27,11 +27,17 @@ echo "...done\n\n";
 
 function makeGeoJson($object) {
   foreach ($object->rings as $points) {
+    $coords = array();
     foreach ($points as $point) {
-      print_r($point) . "\n";
+      $coords .= "[ " . implode(",",$point) . " ]";
     }
+    $partial = '"geometry": {' . "\n" . '"type": "Polygon", ' . "\n" . '"coordinates": [' . "\n[\n";
+    $partial .= implode(",",$coords);
+    $partial .= "]\n]\n}";
+    echo $partial;
+    die();
   }
-  die();
+  
 }
 
 /*    $geojson = '{ "type": "Feature",
