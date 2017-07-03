@@ -19,12 +19,12 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
 $test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27F17A%2F0314%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
 $application = json_decode($test);
 $geojson = makeGeoJSON($application->features[0]->geometry);
+$geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
 
-echo $geojson;
+$polygon = geoPHP::load(json_encode($application),'json');
+echo $geojson . "\n\n\n\n...done!";
 
-echo "...done\n\n";
-
-#$polygon = geoPHP::load(json_encode($application),'json');
+exit();
 
 function makeGeoJson($object) {
   $partial = '';
