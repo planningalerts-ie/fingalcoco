@@ -15,7 +15,7 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
  * WGS84 point of its centroid, then spit out that centroid. More to follow
  */
 
-$coords = getPointFromJSONURI('F17A/0314');
+$coords = getPointFromJSONURI('F16A/0583');
 
 print_r($coords);
 
