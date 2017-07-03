@@ -19,10 +19,10 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
 $test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27F17A%2F0314%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
 $application = json_decode($test);
 $geojson = makeGeoJSON($application->features[0]->geometry);
-#$geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
-
-$polygon = geoPHP::load(json_encode($application),'json');
-echo $geojson . "\n\n\n\n...done!";
+$geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
+echo $geojson;
+$polygon = geoPHP::load($geojson,'json');
+echo "\n\n\n\n...done!";
 
 exit();
 
@@ -41,29 +41,7 @@ function makeGeoJson($object) {
   return $geojson;
 }
 
-/*    $geojson = '{ "type": "Feature",
-        
 
-  
-//
-  {
-       "type": "Feature",
-       "bbox": [-10.0, -10.0, 10.0, 10.0],
-       "geometry": {
-           "type": "Polygon",
-           "coordinates": [
-               [
-                   [-10.0, -10.0],
-                   [10.0, -10.0],
-                   [10.0, 10.0],
-                   [-10.0, -10.0]
-               ]
-           ]
-       }
-       //...
-   }
-  
-  */
   
 // // Read in a page
 // $html = scraperwiki::scrape("http://foo.com");
