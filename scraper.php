@@ -28,7 +28,7 @@ echo "...done\n\n";
 function makeGeoJson($object) {
   foreach ($object->rings as $points) {
     foreach ($points as $point) {
-      echo $point . "\n";
+      print_r($point) . "\n";
     }
   }
   die();
