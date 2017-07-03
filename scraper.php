@@ -22,6 +22,10 @@ $geojson = makeGeoJSON($application->features[0]->geometry);
 $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
 echo $geojson;
 $polygon = geoPHP::load($geojson,'json');
+$centroid = $polygon->getCentroid();
+$centX = $centroid->getX();
+$centY = $centroid->getY();
+echo "x: $centX, y: $centY\n";
 echo "\n\n\n\n...done!";
 
 exit();
