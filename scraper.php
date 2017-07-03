@@ -20,12 +20,12 @@ $test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/Pl
 $application = json_decode($test);
 $geojson = makeGeoJSON($application->features[0]->geometry);
 $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
-echo $geojson;
+#echo $geojson;
 $polygon = geoPHP::load($geojson,'json');
 $centroid = $polygon->getCentroid();
-$centX = $centroid->getX();
-$centY = $centroid->getY();
-echo "x: $centX, y: $centY\n";
+$lng = $centroid->getX();
+$lat = $centroid->getY();
+echo "long: $lng, lat: $lat\n";
 echo "\n\n\n\n...done!";
 
 exit();
