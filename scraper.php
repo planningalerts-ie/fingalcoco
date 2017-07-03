@@ -49,6 +49,8 @@ function makeGeoJson($object) {
     $partial .= "\n]\n]\n}";
   }
   $geojson = '{ "type": "Feature",' . $partial . '}';
+  
+  // This line is for no reason but improved legibility if dumping for debug
   $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
   return $geojson;
 }
