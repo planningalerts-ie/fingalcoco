@@ -20,24 +20,25 @@ $test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/Pl
 $application = json_decode($test);
 $geojson = makeGeoJSON($application->features[0]->geometry);
 
+echo $geojson;
 
 echo "...done\n\n";
 
 #$polygon = geoPHP::load(json_encode($application),'json');
 
 function makeGeoJson($object) {
+  $partial = '';
   foreach ($object->rings as $points) {
     $coords = array();
     foreach ($points as $point) {
       $coords[] .= "[ " . implode(",",$point) . " ]";
     }
-    $partial = '"geometry": {' . "\n" . '"type": "Polygon", ' . "\n" . '"coordinates": [' . "\n[\n";
+    $partial .= '"geometry": {' . "\n" . '"type": "Polygon", ' . "\n" . '"coordinates": [' . "\n[\n";
     $partial .= implode(",",$coords);
-    $partial .= "]\n]\n}";
-    echo $partial;
-    die();
+    $partial .= "\n]\n]\n}";
   }
-  
+  $geojson = '{ "type": "Feature",' . $partial . '}';
+  return $geojson;
 }
 
 /*    $geojson = '{ "type": "Feature",
