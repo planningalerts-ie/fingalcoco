@@ -20,7 +20,6 @@ function getPointFromJSONURI($ref) {
   $uri = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27' . urlencode($ref) .'%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
   $application = json_decode($uri);
   $geojson = makeGeoJSON($application->features[0]->geometry);
-  $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
   $polygon = geoPHP::load($geojson,'json');
   $centroid = $polygon->getCentroid();
   $lng = $centroid->getX();
@@ -43,6 +42,7 @@ function makeGeoJson($object) {
     $partial .= "\n]\n]\n}";
   }
   $geojson = '{ "type": "Feature",' . $partial . '}';
+  $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
   return $geojson;
 }
 
