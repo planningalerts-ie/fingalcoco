@@ -1,34 +1,35 @@
 <?php
 //
-// Dublin City Council Planning Applications
+// Fingal County Council Planning Applications
 // John Handelaar 2017-07-03
 
-// Get feature ID of planning application
-// http://www.dublincity.ie/LocationPublisher/SearchResult.aspx?Group_ID=1&amp;SearchString=3190/17&amp;IsSearchSP=1&amp;RefreshGuid=9a9919ee-7457-4412-9b43-58e74dcbd3cc
-//
-// Get geometry of feature ID
-// POST to http://www.dublincity.ie/LPA/GetGeoJSONFeatureGeometry.asmx/GetFeatureBySearchInformation
-// POST data {"nSearchID":3,"nFeatureKeyFieldValue":64931145}
-// 
 
 require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
 include_once('vendor/phayes/geophp/geoPHP.inc');
 
+$coords = getPointFromJSONURI('F17A/0314');
 
-$test = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27F17A%2F0314%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
-$application = json_decode($test);
-$geojson = makeGeoJSON($application->features[0]->geometry);
-$geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
-#echo $geojson;
-$polygon = geoPHP::load($geojson,'json');
-$centroid = $polygon->getCentroid();
-$lng = $centroid->getX();
-$lat = $centroid->getY();
-echo "long: $lng, lat: $lat\n";
-echo "\n\n\n\n...done!";
+print_r($coords);
+
+echo "\n\n....done.";
 
 exit();
+
+function getPointFromJSONURI($ref) {
+  $uri = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27' . urlencode($ref) .'%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
+  $application = json_decode($uri);
+  $geojson = makeGeoJSON($application->features[0]->geometry);
+  $geojson=json_encode(json_decode($geojson), JSON_PRETTY_PRINT);
+  $polygon = geoPHP::load($geojson,'json');
+  $centroid = $polygon->getCentroid();
+  $lng = $centroid->getX();
+  $lat = $centroid->getY();
+  return array(
+    'lat' => $lat,
+    'lng' => $lng,
+  );
+}
 
 function makeGeoJson($object) {
   $partial = '';
