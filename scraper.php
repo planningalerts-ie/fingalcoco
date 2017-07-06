@@ -115,29 +115,31 @@ foreach ($resultparser->find('tr') as $application) {
 		
 		// Remember when you thought this was the most longwinded part of this?
 		$coords = getPointFromJSONURI($council_reference);
-	
-		
-		$application = array(
-			'council_reference' => $council_reference,
-			'address' => $address,
-			'lat' => $coords['lat'],
-			'lng' => $coords['lng'],
-			'description' => $description,
-			'info_url' => $info_url,
-			'comment_url' => $comment_url,
-			'date_scraped' => $date_scraped,
-			'date_received' => $date_received,
-			'on_notice_from' => $on_notice_from,
-			'on_notice_to' => $on_notice_to
-		);
-		
-		$existingRecords = scraperwiki::select("* from data where `council_reference`='" . $application['council_reference'] . "'");
-		if (sizeof($existingRecords) == 0) {
-			# print_r ($application);
-			scraperwiki::save(array('council_reference'), $application);
-			print (" ...saved\n");
+		if(!($coords == FALSE)) {	
+			$application = array(
+				'council_reference' => $council_reference,
+				'address' => $address,
+				'lat' => $coords['lat'],
+				'lng' => $coords['lng'],
+				'description' => $description,
+				'info_url' => $info_url,
+				'comment_url' => $comment_url,
+				'date_scraped' => $date_scraped,
+				'date_received' => $date_received,
+				'on_notice_from' => $on_notice_from,
+				'on_notice_to' => $on_notice_to
+			);
+			
+			$existingRecords = scraperwiki::select("* from data where `council_reference`='" . $application['council_reference'] . "'");
+			if (sizeof($existingRecords) == 0) {
+				# print_r ($application);
+				scraperwiki::save(array('council_reference'), $application);
+				print (" ...saved\n");
+			} else {
+				print ("...skipping already saved record " . $application['council_reference'] . "\n");
+			}
 		} else {
-			print ("...skipping already saved record " . $application['council_reference'] . "\n");
+			echo "...skipping because no geometry\n";
 		}
 	} else {
 		echo " ...skipping because closed\n";
@@ -162,15 +164,18 @@ function extractRows($html) {
 function getPointFromJSONURI($ref) {
   $uri = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27' . urlencode($ref) .'%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
   $application = json_decode($uri);
-  $geojson = makeGeoJSON($application->features[0]->geometry);
-  $polygon = geoPHP::load($geojson,'json');
-  $centroid = $polygon->getCentroid();
-  $lng = $centroid->getX();
-  $lat = $centroid->getY();
-  return array(
-    'lat' => $lat,
-    'lng' => $lng,
-  );
+  if(count($application->features) > 0) {
+	  $geojson = makeGeoJSON($application->features[0]->geometry);
+	  $polygon = geoPHP::load($geojson,'json');
+	  $centroid = $polygon->getCentroid();
+	  $lng = $centroid->getX();
+	  $lat = $centroid->getY();
+	  return array(
+		'lat' => $lat,
+		'lng' => $lng,
+	  );
+  } else {
+  	  return FALSE;
 }
 
 function makeGeoJson($object) {
