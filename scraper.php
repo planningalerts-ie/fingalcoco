@@ -55,7 +55,7 @@ $response = curl_exec($curl);
 curl_close($curl);
 
 $resultslist = '';
-$resultslist .= extractrows($response);
+$resultslist .= extractRows($response);
 
 // Collect other search URIs
 $pageparser = new simple_html_dom();
@@ -70,8 +70,7 @@ foreach ($links as $link) {
 
 // Append table rows from all subsequent pages to $resultslist
 foreach($pages as $page) {
-    echo file_get_contents($page);
-    die();
+    $resultslist .= extractRows(file_get_contents($page));
 }
 
 echo $resultslist;
