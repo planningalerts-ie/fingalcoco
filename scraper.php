@@ -76,7 +76,7 @@ foreach($pages as $page) {
 	$response = curl_exec($curl);
 	curl_close($curl);
 	$resultslist .= extractRows($response);
-	echo $response;
+	echo $page . "\n\n" . $response;
 	die();
 }
 
