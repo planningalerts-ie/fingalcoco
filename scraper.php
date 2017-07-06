@@ -64,7 +64,8 @@ $links = $pageparser->find('#apas_form_text a');
 
 $pages = array();
 foreach ($links as $link) {
-  $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . urlencode($link->href);
+  $parts = explode('&BackURL=',$link->href);
+  $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $parts[0];
 }
 
 // Append table rows from all subsequent pages to $resultslist
