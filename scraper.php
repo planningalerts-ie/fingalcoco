@@ -34,7 +34,7 @@ $formfields = array(
 foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 rtrim($fields_string, '&');
 
-// Get search form to acquire session cookie
+// Get search form to acquire session cookie 
 $curl = curl_init('http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display');
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
@@ -54,35 +54,44 @@ curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
 $response = curl_exec($curl);
 curl_close($curl);
 
+$resultslist = '';
+$resultslist .= extractrows($response);
+
 // Collect other search URIs
 $pageparser = new simple_html_dom();
 $pageparser->load($response);
 $links = $pageparser->find('#apas_form_text a');    
+
 $pages = array();
 foreach ($links as $link) {
   $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $link->href;
 }
 
-print_r($pages);
+// Append table rows from all subsequent pages to $resultslist
+foreach($pages as $page) {
+	$curl = curl_init($page);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
+    curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $resultslist .= extractRows($response);
+}
 
+echo $resultslist;
 exit();
-
-
-
-
-
-/* 
- * Presently this does nowt but convert a single planning reference from Fingal,
- * which is represented in its GIS maps as a SRID-2157 ITM Polygon, into a 
- * WGS84 point of its centroid, then spit out that centroid. More to follow
- */
 
 #$coords = getPointFromJSONURI('F16A/0583');
 #print_r($coords);
 
-echo "\n\n....done.";
+function extractRows($html) {
+	$split1 = explode('<th class="apas_tblHead"><input type="submit" name="COMPADDBUT.MAINBODY.PACIS2.1" value="Location" class="apas_tblHead_button" /></th>',$html);
+	$split2 = explode('</table>',$split1[1]);
+	$split3 = explode('</tr>',$split2[0])
+	unset $split3[0];
+	return implode('</tr>',$split3);
+}
 
-exit();
 
 function getPointFromJSONURI($ref) {
   $uri = file_get_contents('http://gis.fingal.ie/arcgis/rest/services/Planning/PlanningApplicationsWeb/MapServer/2/query?f=json&where=PLANNING_REFERENCE%3D%27' . urlencode($ref) .'%27&returnGeometry=true&spatialRel=esriSpatialRelIntersects&maxAllowableOffset=0.00001&outFields=*&outSR=4326');
