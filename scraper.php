@@ -88,54 +88,60 @@ foreach ($resultparser->find('tr') as $application) {
 	
 	// uncut extra data is TWO more URLgets away, annoyingly
 	$remaininginfo = file_get_contents($info_url);
-	$details = new simple_html_dom();
-	$details->load($remaininginfo);
-	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
-	$date_scraped = date($date_format);
-	$on_notice_from = $date_received;
-	$todate = $details->find('#apas_form div',13)->plaintext;
-	if(stristr($todate,'application may be made on or before ')) {
-		$todate = explode('application may be made on or before ',$todate);
-		$on_notice_to = $todate[1];
-	} elseif (stristr($todate,'period for this application expired on ')) {
-		$todate = explode('period for this application expired on ',$todate);
-		$on_notice_to = $todate[1];
+	
+	// Do nothing if decsion made
+	if(!(stristr($remaininginfo,'Decision Made by Fingal County Council'))) {
+		$details = new simple_html_dom();
+		$details->load($remaininginfo);
+		$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
+		$date_scraped = date($date_format);
+		$on_notice_from = $date_received;
+		$todate = $details->find('#apas_form div',13)->plaintext;
+		if(stristr($todate,'application may be made on or before ')) {
+			$todate = explode('application may be made on or before ',$todate);
+			$on_notice_to = $todate[1];
+		} elseif (stristr($todate,'period for this application expired on ')) {
+			$todate = explode('period for this application expired on ',$todate);
+			$on_notice_to = $todate[1];
+		} else {
+			$on_notice_to = date($date_format,(strtotime($date_received) + (60*60*24*35)));
+		}
+		unset($todate,$details,$remaininginfo);
+		
+		$descriptionpage = file_get_contents($info_url . '&theTabNo=11');
+		$descriptionscraper = new simple_html_dom();
+		$descriptionscraper->load($descriptionpage);
+		$description = $descriptionscraper->find('input',2)->value;
+		
+		// Remember when you thought this was the most longwinded part of this?
+		$coords = getPointFromJSONURI($council_reference);
+	
+		
+		$application = array(
+			'council_reference' => $council_reference,
+			'address' => $address,
+			'lat' => $coords['lat'],
+			'lng' => $coords['lng'],
+			'description' => $description,
+			'info_url' => $info_url,
+			'comment_url' => $comment_url,
+			'date_scraped' => $date_scraped,
+			'date_received' => $date_received,
+			'on_notice_from' => $on_notice_from,
+			'on_notice_to' => $on_notice_to
+		);
+		
+		$existingRecords = scraperwiki::select("* from data where `council_reference`='" . $application['council_reference'] . "'");
+		if (sizeof($existingRecords) == 0) {
+			# print_r ($application);
+			scraperwiki::save(array('council_reference'), $application);
+			print (" ...saved\n");
+		} else {
+			print ("...skipping already saved record " . $application['council_reference'] . "\n");
+		}
 	} else {
-		$on_notice_to = date($date_format,(strtotime($date_received) + (60*60*24*35)));
+		echo " ...skipping because closed\n";
 	}
-	unset($todate,$details,$remaininginfo);
-	
-	$descriptionpage = file_get_contents($info_url . '&theTabNo=11');
-	$descriptionscraper = new simple_html_dom();
-	$descriptionscraper->load($descriptionpage);
-	$description = $descriptionscraper->find('input',2)->value;
-	
-	// Remember when you thought this was the most longwinded part of this?
-	$coords = getPointFromJSONURI($council_reference);
-
-	
-    $application = array(
-        'council_reference' => $council_reference,
-        'address' => $address,
-        'lat' => $coords['lat'],
-        'lng' => $coords['lng'],
-        'description' => $description,
-        'info_url' => $info_url,
-        'comment_url' => $comment_url,
-        'date_scraped' => $date_scraped,
-        'date_received' => $date_received,
-        'on_notice_from' => $on_notice_from,
-        'on_notice_to' => $on_notice_to
-    );
-    
-	$existingRecords = scraperwiki::select("* from data where `council_reference`='" . $application['council_reference'] . "'");
-    if (sizeof($existingRecords) == 0) {
-        # print_r ($application);
-        scraperwiki::save(array('council_reference'), $application);
-        print (" ...saved\n");
-    } else {
-        print ("...skipping already saved record " . $application['council_reference'] . "\n");
-    }
 
 
 }
