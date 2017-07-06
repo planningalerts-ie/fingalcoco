@@ -79,12 +79,8 @@ $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
 	$council_reference = trim($application->find('td',0)->plaintext);
-	echo "Ref: $council_reference\n";
 	$address = trim($application->find('td',2)->plaintext);
-	echo "Address: $address\n";
-	echo 'href:' . $application->find('td a',0)->href;
 	$urlparts = explode('&backURL=',$application->find('td a',0)->href);
-	print_r($urlparts);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
 	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=' . $council_reference;
@@ -93,12 +89,11 @@ foreach ($resultparser->find('tr') as $application) {
 	$remaininginfo = file_get_contents($info_url);
 	$details = new simple_html_dom();
 	$details->load($remaininginfo);
-	echo $info_url;
 	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
 	echo "received $date_received\n";
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
-	$todate = $details->find('#apas_form')->find('div',12)->find('p',0)->plaintext;
+	$todate = $details->find('#apas_form')->find('div p',12)->plaintext;
 	if(stristr($todate,'application may be made on or before ')) {
 		$todate = explode('application may be made on or before ',$todate);
 		$on_notice_to = $todate[1];
