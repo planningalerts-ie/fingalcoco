@@ -93,7 +93,7 @@ foreach ($resultparser->find('tr') as $application) {
 	echo "received $date_received\n";
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
-	$todate = $details->find('#apas_form')->find('div p',12)->plaintext;
+	$todate = $details->find('#apas_form')->find('div',13)->plaintext;
 	if(stristr($todate,'application may be made on or before ')) {
 		$todate = explode('application may be made on or before ',$todate);
 		$on_notice_to = $todate[1];
