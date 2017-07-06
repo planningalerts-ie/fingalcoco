@@ -7,6 +7,35 @@
 require 'scraperwiki.php';
 require 'scraperwiki/simple_html_dom.php';
 include_once('vendor/phayes/geophp/geoPHP.inc');
+$date_format = 'Y-m-d';
+$cookie_file = '/tmp/cookies.txt';
+$remote_uri = 'http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display';
+$monthago = date() - (30*24*60*60);
+
+$formfields = array(
+  'REGFROMDATE.MAINBODY.WPACIS.1' => date('d/m/Y',$monthago),
+  'REGTODATE.MAINBODY.WPACIS.1' => date('d/m/Y'),
+  );
+
+//url-ify the data for the POST
+foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+rtrim($fields_string, '&');
+
+
+# Get page one of the search results
+$curl = curl_init($remote_uri);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; PlanningAlerts/0.1; +http://www.planningalerts.org/)");
+curl_setopt($curl,CURLOPT_POST, count($formfields));
+curl_setopt($curl,CURLOPT_POSTFIELDS, $fields_string);
+$response = curl_exec($curl);
+curl_close($curl);
+
+echo $response;
+exit();
+
+
+
 
 
 /* 
@@ -15,9 +44,8 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
  * WGS84 point of its centroid, then spit out that centroid. More to follow
  */
 
-$coords = getPointFromJSONURI('F16A/0583');
-
-print_r($coords);
+#$coords = getPointFromJSONURI('F16A/0583');
+#print_r($coords);
 
 echo "\n\n....done.";
 
