@@ -69,7 +69,7 @@ foreach ($links as $link) {
 
 // Append table rows from all subsequent pages to $resultslist
 foreach($pages as $page) {
-    echo $file_get_contents($page);
+    echo file_get_contents($page);
     die();
 }
 
