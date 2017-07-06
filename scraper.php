@@ -78,7 +78,7 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-   echo $application->plaintext;
+   echo $application->find('td',0)->plaintext;
    exit();
 /* 					              
 <tr>  									
