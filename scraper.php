@@ -90,7 +90,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$remaininginfo = file_get_contents($info_url);
 	$details = new simple_html_dom();
 	$details->load($remaininginfo);
-	echo $details->find('#apas_form',0)->find('div',2)->find('p',0)->plaintext . "\n";
+	echo $info_url;
 	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div',2)->find('p',0)->plaintext));
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
