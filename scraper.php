@@ -13,10 +13,22 @@ $remote_uri = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPCRITERIA';
 $monthago = time() - (30*24*60*60);
 
 $formfields = array(
+  'APNID.MAINBODY.WPACIS.1' => '',
+  'JUSTLOCATION.MAINBODY.WPACIS.1' => '',
+  'JUSTDEVDESC.MAINBODY.WPACIS.1' => '',
+  'SURNAME.MAINBODY.WPACIS.1' => '',
   'REGFROMDATE.MAINBODY.WPACIS.1' => date('d/m/Y',$monthago),
   'REGTODATE.MAINBODY.WPACIS.1' => date('d/m/Y'),
-  'SEARCHBUT.MAINBODY.WPACIS.1' => 'Search',
-  );
+  'DECFROMDATE.MAINBODY.WPACIS.1' => '',
+  'DECTODATE.MAINBODY.WPACIS.1' => '',
+  'FINALGRANTFROM.MAINBODY.WPACIS.1' => '',
+  'FINALGRANTTO.MAINBODY.WPACIS.1' => '',
+  'APELDGDATFROM.MAINBODY.WPACIS.1' => '',
+  'APELDGDATTO.MAINBODY.WPACIS.1' => '',
+  'APEDECDATFROM.MAINBODY.WPACIS.1' => '',
+  'APEDECDATTO.MAINBODY.WPACIS.1' => '',
+  'SEARCHBUTTON.MAINBODY.WPACIS.1' => 'Search'  
+);
 
 //url-ify the data for the POST
 foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
