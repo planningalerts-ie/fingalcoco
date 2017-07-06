@@ -78,12 +78,22 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-	#print_r($application);
+
+ 					              
+ 								<tr>
+ 									<td class="apas_tblContent"><a href="WPHAPPDETAIL.DisplayUrl?theApnID=F17A/0320&backURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a> > <a href='wphappsearchres.displayResultsURL?ResultID=1737440%26StartIndex=1%26SortOrder=rgndat,apnid%26DispResultsAs=WPHAPPSEARCHRES%26BackURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a>'>Search Results</a>">F17A/0320</a></td>
+ 					                  		<td class="apas_tblContent">Permission for the separation of existing dwelling into 2 no. dwellings with a</td>
+ 					                  		<td class="apas_tblContent"><input type="hidden" name="ORDERCOUNTER.PAHEADER.PACIS2.3-1" value="" class="input-box" size="7" />
+ 											      1 Balkill Park, Howth, Co Dublin
+ 					                  		</td>
+ 								</tr>
+ 					              
+	
 	$council_reference = trim($application->find('td',0)->find('a')->plaintext);
 	echo "Ref: $council_reference\n";
 	$address = trim($application->find('td',2)->plaintext);
 	echo "Address: $address\n";
-	$urlparts = explode('BackURL=',$application->find('td',0)->find('a')->href);
+	$urlparts = explode('backURL=',$application->find('td',0)->find('a')->href);
 	print_r($urlparts);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
