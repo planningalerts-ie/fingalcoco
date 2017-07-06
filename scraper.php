@@ -78,15 +78,7 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-   echo $application->find('td',0)->plaintext;
-   exit();
-/* 					              
-<tr>  									
-<td class="apas_tblContent"><a href="WPHAPPDETAIL.DisplayUrl?theApnID=F16A/0583&backURL=<a href=wphappcriteria.display?paSearchKey=1661910>Search Criteria</a> > <a href='wphappsearchres.displayResultsURL?ResultID=1738094%26StartIndex=1%26SortOrder=rgndat,apnid%26DispResultsAs=WPHAPPSEARCHRES%26BackURL=<a href=wphappcriteria.display?paSearchKey=1661910>Search Criteria</a>'>Search Results</a>">F16A/0583</a></td>  					                  		<td class="apas_tblContent">The development of a 5 storey over-basement building consisting of 23 residentia</td>  					                  		<td class="apas_tblContent"><input type="hidden" name="ORDERCOUNTER.PAHEADER.PACIS2.1-1" value="" class="input-box" size="7" />  											      Gas Yard Lane, Malahide, Co. Dublin  					                  		</td>  								</tr>
-
- 					              
- 					              */
-	
+	$council_reference = trim($application->find('td',0)->plaintext);
 	$council_reference = trim($application->find('td',0)->find('a')->plaintext);
 	echo "Ref: $council_reference\n";
 	$address = trim($application->find('td',2)->plaintext);
@@ -96,7 +88,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
 	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=' . $council_reference;
-	
+	die();
 	// uncut extra data is TWO more URLgets away, annoyingly
 	$remaininginfo = file_get_contents($info_url);
 	$details = new simple_html_dom();
