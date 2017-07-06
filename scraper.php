@@ -78,16 +78,13 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-   echo $application->outertext;
+   echo $application->plaintext;
    exit();
- 					              /*
- 								<tr>
- 									<td class="apas_tblContent"><a href="WPHAPPDETAIL.DisplayUrl?theApnID=F17A/0320&backURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a> > <a href='wphappsearchres.displayResultsURL?ResultID=1737440%26StartIndex=1%26SortOrder=rgndat,apnid%26DispResultsAs=WPHAPPSEARCHRES%26BackURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a>'>Search Results</a>">F17A/0320</a></td>
- 					                  		<td class="apas_tblContent">Permission for the separation of existing dwelling into 2 no. dwellings with a</td>
- 					                  		<td class="apas_tblContent"><input type="hidden" name="ORDERCOUNTER.PAHEADER.PACIS2.3-1" value="" class="input-box" size="7" />
- 											      1 Balkill Park, Howth, Co Dublin
- 					                  		</td>
- 								</tr>
+/* 					              
+<tr>  									
+<td class="apas_tblContent"><a href="WPHAPPDETAIL.DisplayUrl?theApnID=F16A/0583&backURL=<a href=wphappcriteria.display?paSearchKey=1661910>Search Criteria</a> > <a href='wphappsearchres.displayResultsURL?ResultID=1738094%26StartIndex=1%26SortOrder=rgndat,apnid%26DispResultsAs=WPHAPPSEARCHRES%26BackURL=<a href=wphappcriteria.display?paSearchKey=1661910>Search Criteria</a>'>Search Results</a>">F16A/0583</a></td>  					                  		<td class="apas_tblContent">The development of a 5 storey over-basement building consisting of 23 residentia</td>  					                  		<td class="apas_tblContent"><input type="hidden" name="ORDERCOUNTER.PAHEADER.PACIS2.1-1" value="" class="input-box" size="7" />  											      Gas Yard Lane, Malahide, Co. Dublin  					                  		</td>  								</tr>
+
+ 					              
  					              */
 	
 	$council_reference = trim($application->find('td',0)->find('a')->plaintext);
