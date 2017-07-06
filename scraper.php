@@ -83,7 +83,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$urlparts = explode('&backURL=',$application->find('td a',0)->href);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
-	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=' . $council_reference;
+	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/wchintlogin.display?ApnID=' . $council_reference;
 	
 	// uncut extra data is TWO more URLgets away, annoyingly
 	$remaininginfo = file_get_contents($info_url);
@@ -93,7 +93,7 @@ foreach ($resultparser->find('tr') as $application) {
 	echo "received $date_received\n";
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
-	$todate = $details->find('#apas_form div',13)->plaintext;
+	$todate = $details->find('#apas_form')->find('div',13)->plaintext;
 	if(stristr($todate,'application may be made on or before ')) {
 		$todate = explode('application may be made on or before ',$todate);
 		$on_notice_to = $todate[1];
@@ -108,7 +108,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$descriptionpage = file_get_contents($info_url . '&theTabNo=11');
 	$descriptionscraper = new simple_html_dom();
 	$descriptionscraper->load($descriptionpage);
-	$description = $descriptionscraper->find('input[name=DEVLDESC.PAPROPOSAL.PACIS2.1-1]')->value;
+	$description = $descriptionscraper->find('input',2)->value;
 	
 	// Remember when you thought this was the most longwinded part of this?
 	$coords = getPointFromJSONURI($council_reference);
