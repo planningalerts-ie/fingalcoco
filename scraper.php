@@ -22,12 +22,23 @@ $formfields = array(
 foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 rtrim($fields_string, '&');
 
+// Get search form to acquire session cookie
+$curl = curl_init('http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display';
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
+curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
+$got_cookie = curl_exec($curl);
+curl_close($curl);
+unset($got_cookie);
+
 # Get page one of the search results
 $curl = curl_init($remote_uri);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; PlanningAlerts/0.1; +http://www.planningalerts.org/)");
-curl_setopt($curl,CURLOPT_POST, count($formfields));
-curl_setopt($curl,CURLOPT_POSTFIELDS, $fields_string);
+curl_setopt($curl, CURLOPT_POST, count($formfields));
+curl_setopt($curl, CURLOPT_POSTFIELDS, $fields_string);
+curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
+curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
 $response = curl_exec($curl);
 curl_close($curl);
 
