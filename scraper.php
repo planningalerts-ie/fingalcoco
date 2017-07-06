@@ -23,7 +23,7 @@ foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 rtrim($fields_string, '&');
 
 // Get search form to acquire session cookie
-$curl = curl_init('http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display';
+$curl = curl_init('http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display');
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
 curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
