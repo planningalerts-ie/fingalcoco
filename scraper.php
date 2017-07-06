@@ -69,15 +69,8 @@ foreach ($links as $link) {
 
 // Append table rows from all subsequent pages to $resultslist
 foreach($pages as $page) {
-	$curl = curl_init($page);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl, CURLOPT_COOKIEJAR, $cookie_file);
-	curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
-	$response = curl_exec($curl);
-	curl_close($curl);
-	$resultslist .= extractRows($response);
-	echo $page . "\n\n" . $response;
-	die();
+    echo $file_get_contents($page);
+    die();
 }
 
 echo $resultslist;
