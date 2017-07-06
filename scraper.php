@@ -67,17 +67,74 @@ foreach ($links as $link) {
   $parts = explode('&BackURL=',$link->href);
   $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $parts[0];
 }
+unset($pageparser);
 
 // Append table rows from all subsequent pages to $resultslist
 foreach($pages as $page) {
     $resultslist .= extractRows(file_get_contents($page));
 }
 
+// Finally actually process the data
+$resultparser = new simple_html_dom();
+$resultparser->load($resultslist);
+foreach ($resultparser->find('tr') as $application) {
+	$council_reference = trim($application->find('tr',0)->find('a')->innertext);
+	$address = trim($application->find('td',2)->plaintext);
+	$urlparts = explode('&BackURL=',$application->find('tr',0)->find('a')->href);
+	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
+	unset($urlparts);
+	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=' . $council_reference;
+	
+	// uncut extra data is TWO more URLgets away, annoyingly
+	$remaininginfo = file_get_contents($info_url);
+	$details = new simple_html_dom();
+	$details->load($remaininginfo);
+	$date_received = date($date_format,strtotime($details->find('div[id=apas_form]')->find('div',2)->find('p',0)->plaintext));
+	$date_scraped = date($date_format);
+	$on_notice_from = $date_received;
+	$todate = $details->find('div[id=apas_form]')->find('div',13)->find('p',0)->plaintext;
+	if(stristr($todate,'application may be made on or before ')) {
+		$todate = explode('application may be made on or before ',$todate);
+		$on_notice_to = $todate[1];
+	} elseif (stristr($todate,'period for this application expired on ')) {
+		$todate = explode('period for this application expired on ',$todate);
+		$on_notice_to = $todate[1];
+	} else {
+		die("can't determine date from this: \n\n$todate");
+	}
+	unset($todate,$details,$remaininginfo);
+	
+	$descriptionpage = file_get_contents($info_url . '&theTabNo=11');
+	$descriptionscraper = new simple_html_dom();
+	$descriptionscraper->load($descriptionpage);
+	$description = $descriptionscraper->find('input[name=DEVLDESC.PAPROPOSAL.PACIS2.1-1]')->value;
+	
+	// Remember when you thought this was the most longwinded part of this?
+	$coords = getPointFromJSONURI($council_reference);
+
+	
+    $application = array(
+        'council_reference' => $council_reference,
+        'address' => $address,
+        'lat' => $coords['lat'],
+        'lng' => $coords['lng'],
+        'description' => $description,
+        'info_url' => $info_url,
+        'comment_url' => $comment_url,
+        'date_scraped' => $date_scraped,
+        'date_received' => $date_received,
+        'on_notice_from' => $on_notice_from,
+        'on_notice_to' => $on_notice_to
+    );
+
+	print_r($application);	
+	exit();
+}
+
+
 echo $resultslist;
 exit();
 
-#$coords = getPointFromJSONURI('F16A/0583');
-#print_r($coords);
 
 function extractRows($html) {
 	$split1 = explode('<th class="apas_tblHead"><input type="submit" name="COMPADDBUT.MAINBODY.PACIS2.1" value="Location" class="apas_tblHead_button" /></th>',$html);
