@@ -88,7 +88,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
 	$comment_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPDETAIL.DisplayUrl?theApnID=' . $council_reference;
-	die();
+	
 	// uncut extra data is TWO more URLgets away, annoyingly
 	$remaininginfo = file_get_contents($info_url);
 	$details = new simple_html_dom();
