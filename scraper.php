@@ -79,10 +79,10 @@ $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
 	$council_reference = trim($application->find('td',0)->plaintext);
-	$council_reference = trim($application->find('td',0)->find('a')->plaintext);
 	echo "Ref: $council_reference\n";
 	$address = trim($application->find('td',2)->plaintext);
 	echo "Address: $address\n";
+	echo 'href:' . $application->find('td a',0)->href;
 	$urlparts = explode('backURL=',$application->find('td',0)->find('a')->href);
 	print_r($urlparts);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
