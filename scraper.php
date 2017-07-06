@@ -64,7 +64,7 @@ $links = $pageparser->find('#apas_form_text a');
 
 $pages = array();
 foreach ($links as $link) {
-  $parts = explode('&BackURL=',$link->href);
+  $parts = explode('BackURL=',$link->href);
   $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $parts[0];
 }
 unset($pageparser);
@@ -79,11 +79,11 @@ $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
 	#print_r($application);
-	$council_reference = trim($application->find('td',0)->find('a')->innertext);
+	$council_reference = trim($application->find('td',0)->find('a')->plaintext);
 	echo "Ref: $council_reference\n";
 	$address = trim($application->find('td',2)->plaintext);
 	echo "Address: $address\n";
-	$urlparts = explode('&BackURL=',$application->find('td',0)->find('a')->href);
+	$urlparts = explode('BackURL=',$application->find('td',0)->find('a')->href);
 	print_r($urlparts);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
