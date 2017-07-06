@@ -176,6 +176,7 @@ function getPointFromJSONURI($ref) {
 	  );
   } else {
   	  return FALSE;
+  }
 }
 
 function makeGeoJson($object) {
