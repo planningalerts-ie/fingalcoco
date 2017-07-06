@@ -78,7 +78,8 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-
+   echo $application->outertext;
+   exit();
  					              /*
  								<tr>
  									<td class="apas_tblContent"><a href="WPHAPPDETAIL.DisplayUrl?theApnID=F17A/0320&backURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a> > <a href='wphappsearchres.displayResultsURL?ResultID=1737440%26StartIndex=1%26SortOrder=rgndat,apnid%26DispResultsAs=WPHAPPSEARCHRES%26BackURL=<a href=wphappcriteria.display?paSearchKey=1661268>Search Criteria</a>'>Search Results</a>">F17A/0320</a></td>
