@@ -78,8 +78,8 @@ foreach($pages as $page) {
 $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
-	print_r($application);
-	$council_reference = trim($application->find('tr',0)->find('a')->innertext);
+	#print_r($application);
+	$council_reference = trim($application->find('td',0)->find('a')->innertext);
 	$address = trim($application->find('td',2)->plaintext);
 	$urlparts = explode('&BackURL=',$application->find('tr',0)->find('a')->href);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
