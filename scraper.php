@@ -1,7 +1,7 @@
 <?php
 //
 // Fingal County Council Planning Applications
-// John Handelaar 2017-07-03
+// John Handelaar 2017-07-06
 
 
 require 'scraperwiki.php';
@@ -127,13 +127,20 @@ foreach ($resultparser->find('tr') as $application) {
         'on_notice_from' => $on_notice_from,
         'on_notice_to' => $on_notice_to
     );
+    
+	$existingRecords = scraperwiki::select("* from data where `council_reference`='" . $application['council_reference'] . "'");
+    if (sizeof($existingRecords) == 0) {
+        # print_r ($application);
+        scraperwiki::save(array('council_reference'), $application);
+        print ("Saving new record: " . $application["council_reference"] . "\n");
+    } else {
+        print ("Skipping already saved record " . $application['council_reference'] . "\n");
+    }
 
-	print_r($application);	
-	exit();
+
 }
 
-
-echo $resultslist;
+echo "...done";
 exit();
 
 
