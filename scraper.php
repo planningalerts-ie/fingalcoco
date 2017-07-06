@@ -10,17 +10,17 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
 $date_format = 'Y-m-d';
 $cookie_file = '/tmp/cookies.txt';
 $remote_uri = 'http://planning.fingalcoco.ie/swiftlg/apas/run/wphappcriteria.display';
-$monthago = date() - (30*24*60*60);
+$monthago = time() - (30*24*60*60);
 
 $formfields = array(
   'REGFROMDATE.MAINBODY.WPACIS.1' => date('d/m/Y',$monthago),
   'REGTODATE.MAINBODY.WPACIS.1' => date('d/m/Y'),
+  'SEARCHBUT.MAINBODY.WPACIS.1' => 'Search',
   );
 
 //url-ify the data for the POST
 foreach($formfields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
 rtrim($fields_string, '&');
-
 
 # Get page one of the search results
 $curl = curl_init($remote_uri);
