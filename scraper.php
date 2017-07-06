@@ -10,14 +10,14 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
 $date_format = 'Y-m-d';
 $cookie_file = '/tmp/cookies.txt';
 $remote_uri = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPCRITERIA';
-$monthago = time() - (30*24*60*60);
+$daysago = time() - (14*24*60*60);
 
 $formfields = array(
   'APNID.MAINBODY.WPACIS.1' => '',
   'JUSTLOCATION.MAINBODY.WPACIS.1' => '',
   'JUSTDEVDESC.MAINBODY.WPACIS.1' => '',
   'SURNAME.MAINBODY.WPACIS.1' => '',
-  'REGFROMDATE.MAINBODY.WPACIS.1' => date('d/m/Y',$monthago),
+  'REGFROMDATE.MAINBODY.WPACIS.1' => date('d/m/Y',$daysago),
   'REGTODATE.MAINBODY.WPACIS.1' => date('d/m/Y'),
   'DECFROMDATE.MAINBODY.WPACIS.1' => '',
   'DECTODATE.MAINBODY.WPACIS.1' => '',
@@ -136,10 +136,10 @@ foreach ($resultparser->find('tr') as $application) {
 				scraperwiki::save(array('council_reference'), $application);
 				print (" ...saved\n");
 			} else {
-				print ("...skipping already saved record " . $application['council_reference'] . "\n");
+				print (" ...skipping already saved record " . $application['council_reference'] . "\n");
 			}
 		} else {
-			echo "...skipping because no geometry\n";
+			echo " ...skipping because no geometry\n";
 		}
 	} else {
 		echo " ...skipping because closed\n";
