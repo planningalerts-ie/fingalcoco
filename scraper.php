@@ -54,7 +54,17 @@ curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file);
 $response = curl_exec($curl);
 curl_close($curl);
 
-echo $response;
+// Collect other search URIs
+$pageparser = new simple_html_dom();
+$pageparser->load($response);
+$links = $pageparser->find('#apas_form_text a');    
+$pages = array();
+foreach ($links as $link) {
+  $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $link->href;
+}
+
+print_r($pages);
+
 exit();
 
 
