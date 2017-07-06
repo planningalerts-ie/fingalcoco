@@ -1,7 +1,7 @@
 <?php
 //
 // Fingal County Council Planning Applications
-// John Handelaar 2017-07-06
+// John Handelaar 2017-07-03
 
 
 require 'scraperwiki.php';
@@ -79,6 +79,7 @@ $resultparser = new simple_html_dom();
 $resultparser->load($resultslist);
 foreach ($resultparser->find('tr') as $application) {
 	$council_reference = trim($application->find('td',0)->plaintext);
+	echo "Found $council_reference";
 	$address = trim($application->find('td',2)->plaintext);
 	$urlparts = explode('&backURL=',$application->find('td a',0)->href);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
@@ -90,7 +91,6 @@ foreach ($resultparser->find('tr') as $application) {
 	$details = new simple_html_dom();
 	$details->load($remaininginfo);
 	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
-	echo "received $date_received\n";
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
 	$todate = $details->find('#apas_form div',13)->plaintext;
@@ -132,7 +132,7 @@ foreach ($resultparser->find('tr') as $application) {
     if (sizeof($existingRecords) == 0) {
         # print_r ($application);
         scraperwiki::save(array('council_reference'), $application);
-        print ("Saving new record: " . $application["council_reference"] . "\n");
+        print (" ...saved\n");
     } else {
         print ("Skipping already saved record " . $application['council_reference'] . "\n");
     }
