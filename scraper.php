@@ -101,7 +101,7 @@ foreach ($resultparser->find('tr') as $application) {
 		$todate = explode('period for this application expired on ',$todate);
 		$on_notice_to = $todate[1];
 	} else {
-		die("can't determine date from this: \n\n$todate");
+		$on_notice_to = date($date_format,(strtotime($date_received) + (60*60*24*35)));
 	}
 	unset($todate,$details,$remaininginfo);
 	
@@ -134,7 +134,7 @@ foreach ($resultparser->find('tr') as $application) {
         scraperwiki::save(array('council_reference'), $application);
         print (" ...saved\n");
     } else {
-        print ("Skipping already saved record " . $application['council_reference'] . "\n");
+        print ("...skipping already saved record " . $application['council_reference'] . "\n");
     }
 
 
