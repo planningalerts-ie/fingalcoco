@@ -94,10 +94,11 @@ foreach ($resultparser->find('tr') as $application) {
 	$details = new simple_html_dom();
 	$details->load($remaininginfo);
 	echo $info_url;
-	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div',2)->find('p',0)->plaintext));
+	$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
+	echo "received $date_received\n";
 	$date_scraped = date($date_format);
 	$on_notice_from = $date_received;
-	$todate = $details->find('#apas_form')->find('div',13)->find('p',0)->plaintext;
+	$todate = $details->find('#apas_form')->find('div',12)->find('p',0)->plaintext;
 	if(stristr($todate,'application may be made on or before ')) {
 		$todate = explode('application may be made on or before ',$todate);
 		$on_notice_to = $todate[1];
