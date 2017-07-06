@@ -83,7 +83,7 @@ foreach ($resultparser->find('tr') as $application) {
 	$address = trim($application->find('td',2)->plaintext);
 	echo "Address: $address\n";
 	echo 'href:' . $application->find('td a',0)->href;
-	$urlparts = explode('backURL=',$application->find('td',0)->find('a')->href);
+	$urlparts = explode('&backURL=',$application->find('td a',0)->href);
 	print_r($urlparts);
 	$info_url = 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $urlparts[0];
 	unset($urlparts);
