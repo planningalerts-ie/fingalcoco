@@ -10,7 +10,7 @@ include_once('vendor/phayes/geophp/geoPHP.inc');
 $date_format = 'Y-m-d';
 $cookie_file = '/tmp/cookies.txt';
 $remote_uri = 'http://planning.fingalcoco.ie/swiftlg/apas/run/WPHAPPCRITERIA';
-$daysago = time() - (31*24*60*60);
+$daysago = time() - (14*24*60*60);
 
 $formfields = array(
   'APNID.MAINBODY.WPACIS.1' => '',
