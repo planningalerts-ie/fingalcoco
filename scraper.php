@@ -99,10 +99,10 @@ foreach ($resultparser->find('tr') as $application) {
 		$todate = $details->find('#apas_form div',13)->plaintext;
 		if(stristr($todate,'application may be made on or before ')) {
 			$todate = explode('application may be made on or before ',$todate);
-			$on_notice_to = $todate[1];
+			$on_notice_to = date($date_format,strtotime($todate[1]));
 		} elseif (stristr($todate,'period for this application expired on ')) {
 			$todate = explode('period for this application expired on ',$todate);
-			$on_notice_to = $todate[1];
+			$on_notice_to = date($date_format,strtotime($todate[1]));
 		} else {
 			$on_notice_to = date($date_format,(strtotime($date_received) + (60*60*24*35)));
 		}
