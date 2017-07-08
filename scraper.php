@@ -93,7 +93,7 @@ foreach ($resultparser->find('tr') as $application) {
 	if(!(stristr($remaininginfo,'Decision Made by Fingal County Council'))) {
 		$details = new simple_html_dom();
 		$details->load($remaininginfo);
-		$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',2)->plaintext));
+		$date_received = date($date_format,strtotime($details->find('#apas_form',0)->find('div p',1)->plaintext));
 		$date_scraped = date($date_format);
 		$on_notice_from = $date_received;
 		$todate = $details->find('#apas_form div',13)->plaintext;
