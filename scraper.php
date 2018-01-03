@@ -65,7 +65,7 @@ $links = $pageparser->find('#apas_form_text a');
 $pages = array();
 foreach ($links as $link) {
   $parts = explode('BackURL=',$link->href);
-  $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . $parts[0];
+  $pages[] .= 'http://planning.fingalcoco.ie/swiftlg/apas/run/' . str_replace(" ","",$parts[0]);
 }
 unset($pageparser);
 
